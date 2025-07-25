@@ -56,7 +56,7 @@
     </div>
     <div class="navbar-menu">
       <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-        <a class="navbar-item" href=https://github.com/HumanAIGC>
+        <a class="navbar-item" href=https://github.com/Human3DAIGC>
           <span class="icon">
             <i class="fas fa-home"></i>
           </span>
@@ -148,3 +148,251 @@
     </div>
   </div>
 </section>
+
+<!-- Teaser video-->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video poster="" id="tree" autoplay controls muted loop height="80%">
+        <!-- Your video here -->
+        <source src="static/videos/cartoonalive_demo.mp4"
+        type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+<!--        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus.-->
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
+
+  <!-- Teaser video-->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video poster="" id="tree" controls loop height="80%">
+        <!-- Your video here -->
+        <source src="static/videos/drive_by_mediapipe.mp4"
+        type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+<!--        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus.-->
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
+
+
+<!-- Paper abstract -->
+<section class="section hero is-small">
+  <div class="container is-max-desktop">
+<!--    <div class="columns is-centered has-text-centered">-->
+<!--      <div class="column is-four-fifths">-->
+        <h2 class="title is-2">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            With the rapid advancement of large foundation models, AIGC, cloud rendering, and real-time motion capture technologies, digital humans are now capable of achieving synchronized facial expressions and body movements, engaging in intelligent dialogues driven by natural language, and enabling the fast creation of personalized avatars. While current mainstream approaches to digital humans primarily focus on 3D models and 2D video-based representations, interactive 2D cartoon-style digital humans have received relatively less attention. Compared to 3D digital humans that require complex modeling and high rendering costs, and 2D video-based solutions that lack flexibility and real-time interactivity, 2D cartoon-style Live2D models offer a more efficient and expressive alternative. By simulating 3D-like motion through layered segmentation without the need for traditional 3D modeling, Live2D enables dynamic and real-time manipulation. In this technical report, we present <b>CartoonAlive</b>, an innovative method for generating high-quality Live2D digital humans from a single input portrait image. <b>CartoonAlive</b> leverages the shape basis concept commonly used in 3D face modeling to construct facial blendshapes suitable for Live2D. It then infers the corresponding blendshape weights based on facial keypoints detected from the input image. This approach allows for the rapid generation of a highly expressive and visually accurate Live2D model that closely resembles the input portrait, within less than half a minute. Our work provides a practical and scalable solution for creating interactive 2D cartoon characters, opening new possibilities in digital content creation and virtual character animation.
+          </p>
+        </div>
+      </div>
+<!--    </div>-->
+<!--  </div>-->
+</section>
+<!-- End paper abstract -->
+
+
+
+
+  <!-- Method -->
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <h2 class="title is-2">Method</h2>
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <img src="static/images/framework/cartoonalive_pipeline.png" alt="MY ALT TEXT" style="width: 100%; height: 100%;" />
+        </div>
+        <div class="item">
+          <h2 class="content has-text-justified">
+            <p style="font-size: 1.0em;">
+              Overview of the <b>CartoonAlive</b> pipeline. (a) <b>Facial Feature Alignment</b>: The input portrait is first preprocessed to align the eyes horizontally, ensuring consistent orientation. Then, facial keypoints for the eyes, nose, mouth, eyebrows, and facial contour are individually detected. A transformation is computed between each set of detected keypoints and those of a predefined template model. Based on this correspondence, each facial component in the input image is aligned accordingly.
+              (b) <b>Facial Feature Parameter Estimation</b>: Facial features are temporarily removed from the texture, and rendering is performed using only the underlying face image. Keypoints are then extracted from the rendered image, and corresponding Live2D parameters (e.g., position and scale) are inferred through a trained neural network.
+              (c) <b>Underlying Face Repainting</b>: To eliminate visual artifacts caused by overlapping facial features during animation, the underlying face image is repainted according to a mask derived from the inferred parameters, effectively removing foreground features that may interfere with dynamic expressions.
+              (d) <b>Hair Texture Extraction</b>: Hair segmentation is applied to isolate the hair region from the original image, which is then transferred into the final Live2D model as a separate texture layer. This ensures realistic integration of hair while preserving the integrity of facial components.
+          </p>
+          </h2>
+
+          <!-- <h2 class="title is-3">Post-Hoc Refiner</h2> -->
+
+        </div>
+               </div>
+             </div>
+  </section>
+  <!-- End Method -->
+
+
+  <section class="section hero is-small">
+  <div class="container is-max-desktop">
+<!--    <div class="columns is-centered has-text-centered">-->
+<!--      <div class="column is-four-fifths">-->
+        <h2 class="title is-2">Features</h2>
+
+           <h2 class="title is-4">Live2D Blendshape Design</h2>
+        <div class="content has-text-justified">
+          <p>
+            We redesign the structure of Live2D models to support linear control of facial components along three axes: horizontal (x), vertical (y), and scaling (scale), with parameter ranges spanning from -30 to 30. This enables the creation of a diverse range of facial expressions and identities. Additionally, we modify and expand the base face template to accommodate various facial types, including long, round, and broad faces.
+           </p>
+
+          <h2 class="title is-4">Accurate Facial Parameter Prediction</h2>
+        <div class="content has-text-justified">
+          <p>
+            To enable precise parameter estimation, we synthesize a large dataset of 100,000 paired samples by rendering 1024×1024 facial images at consistent positions using the PyGame rendering engine. For each rendered image, facial landmarks are extracted and matched with their corresponding Live2D parameters. We then train a Multilayer Perceptron (MLP) to learn the mapping from facial landmarks to Live2D parameters. During inference, this network accurately predicts the necessary parameters based on the detected landmark positions from the input image.
+              </p>
+
+          <h2 class="title is-4">Dynamic Artifact Correction</h2>
+        <div class="content has-text-justified">
+          <p>
+            Once the facial parameters are obtained, the corresponding textures are placed accordingly. However, during animation, visual artifacts may occur due to misalignment between the foreground elements and the underlying face image; for example, when the eyes are closed, the background eyes may still be visible. To resolve this issue, we render facial masks based on the inferred parameters and use them to precisely identify the regions requiring inpainting. Guided by these masks, we repaint the underlying face image to eliminate visual inconsistencies, ensuring a dynamically flawless Live2D model during animation.
+          </p>
+
+
+                  <h2 class="title is-4">Hair Transfer</h2>
+        <div class="content has-text-justified">
+          <p>
+            After aligning the facial contour, we perform hair segmentation on the input image to extract the hair mask, which is then transferred to the hair texture. If bangs occlude the eyebrows in the input image, we first remove the hair before extracting facial feature textures and parameters. Finally, we apply hair segmentation to the original image and transfer the hair to the final Live2D model.
+          </p>
+
+          <!-- <h2 class="title is-4">Industry-Compatible</h2> -->
+        <!-- <div class="content has-text-justified">
+          <p>
+          Our method utilizes explicit 3D representation, ensuring seamless integration with standard CG pipelines employed in the game and film industries.
+          </p>
+
+
+        </div> -->
+      </div>
+<!--    </div>-->
+<!--  </div>-->
+</section>
+
+  <!-- Video carousel -->
+
+  <style>
+    .results-carousel {
+    display: flex;
+    justify-content: center;
+  }
+  .item video {
+    width: 100%; /* 视频宽度自适应容器宽度 */
+    height: auto; /* 视频高度根据比例自适应 */
+    max-height: 60vh; /* 视频最大高度不超过视窗高度的50% */
+  }
+
+  .item p {
+  margin-top: 30px; /* 在视频和描述文字之间添加一些间距 */
+  }
+<!--</style>-->
+
+  <section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <h2 class="title is-2">Created Characters</h2>
+      <p>Textoon supports both English and Chinese prompts.</p>
+      <div id="results-carousel" class="carousel results-carousel">
+
+
+          <div class="item item-video1">
+          <video poster="" id="video1" autoplay controls muted loop>
+            <source src="static/videos/showcases/01.mp4" type="video/mp4">
+          </video>
+        </div>
+
+
+          <div class="item item-video1">
+          <video poster="" id="video2" autoplay controls muted loop>
+            <source src="static/videos/showcases/02.mp4" type="video/mp4">
+          </video>
+        </div>
+
+
+
+         <div class="item item-video1">
+         <video poster="" id="video3" autoplay controls muted loop>
+           <source src="static/videos/showcases/03.mp4" type="video/mp4">
+         </video>
+       </div>
+
+          <div class="item item-video1">
+          <video poster="" id="video4" autoplay controls muted loop>
+            <source src="static/videos/showcases/04.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="item item-video1">
+          <video poster="" id="video5" autoplay controls muted loop>
+            <source src="static/videos/showcases/05.mp4" type="video/mp4">
+          </video>
+        </div>
+
+
+         <div class="item item-video1">
+          <video poster="" id="video6" autoplay controls muted loop>
+            <source src="static/videos/showcases/06.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- End video carousel -->
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+@misc{he2025cartoonaliveexpressivelive2dmodeling,
+      title={CartoonAlive: Towards Expressive Live2D Modeling from Single Portraits}, 
+      author={Chao He and Jianqiang Ren and Jianjing Xiang and Xiejie Shen},
+      year={2025},
+      eprint={2507.17327},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2507.17327}, 
+}
+      </code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
